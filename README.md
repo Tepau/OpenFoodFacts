@@ -36,10 +36,18 @@ Si l'utilisateur entre un caractère qui n'est pas un chiffre, le programme doit
 
 La recherche doit s'effectuer sur une base MySql.
 
+
 En tant qu'utilisateur, je veux sélectionner un aliment pour accéder à son substitut.
+
 En tant qu’utilisateur, je veux sélectionner une catégorie de produits, pour accéder à la liste des produits.
+
 En tant qu'utilisateur, je veux enregistrer une recherche, pour y accéder plus tard.
+
 En tant qu'utilisateur, je veux me créer un compte pour pouvoir enregistrer des données.
+
 En tant qu'utilisateur, je veux me connecter, pour accéder à mon compte.
-En tant qu'utilisateur, je veux accéder à mes recherches enregistrées, pour 
+
+En tant qu'utilisateur, je veux accéder à mes recherches enregistrées, pour les voir.
+
 En tant qu'administrateur, je veux ajouter des aliments à la base données, pour offrir plus de choix aux utilisateurs.
+
