@@ -4,7 +4,7 @@ import mysql.connector
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="tEPAU1992"
+  password="********"
 )
 mycursor = mydb.cursor()
 
@@ -33,7 +33,7 @@ mycursor.execute("""CREATE TABLE Category (
 
 mycursor.execute(""" CREATE TABLE Store (
 	id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	store_name VARCHAR(150) UNIQUE
+	store_name VARCHAR(150) UNIQUE NOT NULL
 	)""")
 
 mycursor.execute("""CREATE TABLE Store_product(
@@ -65,7 +65,8 @@ mycursor.execute(""" CREATE TABLE Favorite (
 	product_id BIGINT UNSIGNED NOT NULL,
 	substitute_id BIGINT UNSIGNED NOT NULL,
 	date_heure DATETIME,
-	PRIMARY KEY(product_id,substitute_id, date_heure),
+	pseudo VARCHAR(30) NOT NULL,
+	PRIMARY KEY(product_id,substitute_id, pseudo),
 	CONSTRAINT fk_product_id_code
 		FOREIGN KEY (product_id)
 		REFERENCES Product(code),

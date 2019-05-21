@@ -6,16 +6,16 @@ import mysql.connector
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="tEPAU1992",
+  password="********",
   database="appli"
 )
 mycursor = mydb.cursor()
 
-CATEGORIES = ['Fromages',
+CATEGORIES = ['Sandwichs',
               'Conserves',
               'Viandes',
-              'Produits à tartiner',
-              'Desserts']
+              'Poissons',
+              'Snacks']
 
 GRADES = ['a','e']
 
@@ -94,7 +94,7 @@ for product in final_format:
     bon_format = categorie.split(",")
     for nom in bon_format:
         bon_nom = nom.strip()
-        if bon_nom not in all_category:
+        if bon_nom not in all_category and bon_nom != '' :
             all_category.append(bon_nom)
 
 # Pour remplir la table catégorie
@@ -109,7 +109,7 @@ for product in final_format:
    bon_format = store.split(",")
    for magasin in bon_format:
       sans_espace_minuscule = magasin.lower().strip()
-      if sans_espace_minuscule not in all_store:
+      if sans_espace_minuscule not in all_store and sans_espace_minuscule != '':
           all_store.append(sans_espace_minuscule)
 
 # Pour remplir la table Store 
@@ -122,7 +122,8 @@ def bon_format(liste):
     toutes_cat = []
     for nom in liste:
         bon_nom = nom.strip()
-        toutes_cat.append(bon_nom)
+        if bon_nom != '':
+            toutes_cat.append(bon_nom)
     return toutes_cat
 
 #Test pour intégrer les produits et remplir la tbale 'category product'
