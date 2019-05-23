@@ -1,64 +1,5 @@
-import mysql
-import mysql.connector
-import random
-from datetime import datetime
-now = datetime.now()
+from fonctions import afficher_substitut, afficher_pdt_sauvegarde, sauvegarder_pdt
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="********",
-  database="appli"
-)
-mycursor = mydb.cursor()
-
-liste_sauvegarde = []
-
-def afficher_substitut(categorie):
-
-    mycursor.execute("""SELECT product_name_fr, code \
-        FROM Product \
-        INNER JOIN Category_product ON Product.code = Category_product.product_id \
-        INNER JOIN Category ON Category.id = Category_product.category_id \
-        WHERE category_name = %s AND nutrition_grade_fr = 'e' """, (categorie,))
-    myresult = mycursor.fetchall()
-    x = 1
-    print("Voici la sélection de produits : ")
-    for result in myresult:
-        print(x, ':', result[0])
-        x += 1
-    choix_2 = 0
-    while choix_2 < 1 or choix_2 >= x:
-        choix_2 = input("Tapez le numéro associé au produit que vous voulez substituer : ")
-
-        try:
-            choix_2 = int(choix_2)
-        except ValueError:
-            print('Vous devez saisir un chiffre')
-            choix_2 = 0
-            continue
-        if choix_2 < 1 or choix_2 >= x:
-            print('Vous devez saisir un chiffre en 1 et ', x)
-            continue
-
-        code_pdt_substitue = myresult[choix_2 - 1][1]
-        liste_sauvegarde.append(code_pdt_substitue)
-        if choix_2 < x:
-            mycursor.execute("""SELECT product_name_fr, url, generic_name_fr, store_name, code \
-            FROM Product \
-            INNER JOIN Category_product ON Product.code = Category_product.product_id \
-            INNER JOIN Category ON Category.id = Category_product.category_id \
-            INNER JOIN Store_product ON Product.code = Store_product.product_id \
-            INNER JOIN Store ON Store.id = Store_product.store_id \
-            WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (categorie,))
-            myresult = mycursor.fetchall() 
-            aleatoire = random.choice(myresult)
-            code_pdt_de_substitution = aleatoire[4]
-            liste_sauvegarde.append(code_pdt_de_substitution)
-            print('Pour remplacer ce produit, nous vous proposons : ', aleatoire[0], '\n',
-                'La description de ce produit est : ', aleatoire[2], '\n',
-                'Il est disponible dans le(s) magasin(s) suivant(s) : ', aleatoire[3], '\n',
-                'Son url est la suivante : ', aleatoire[1])
 
 nom = input("Entrez votre pseudo: ")
 nom_good_format = nom.lower()
@@ -66,6 +7,7 @@ nom_good_format = nom.lower()
 boucle_principale = True
 
 while boucle_principale:
+        liste_sauvegarde = []
 
         choix_1 = 0
         while choix_1 < 1 or choix_1 > 3:
@@ -105,17 +47,16 @@ while boucle_principale:
                         print('Le chiffre doit être compris entre 1 et 5')
                         continue
 
-
                     if choix_categorie == 1:
-                        afficher_substitut('Sandwichs')
+                        afficher_substitut('Sandwichs', liste_sauvegarde)
                     elif choix_categorie == 2:
-                        afficher_substitut('Conserves')  
+                        afficher_substitut('Conserves', liste_sauvegarde)  
                     elif choix_categorie == 3:
-                        afficher_substitut('Viandes')
+                        afficher_substitut('Viandes', liste_sauvegarde)
                     elif choix_categorie == 4:
-                        afficher_substitut('Poissons')
+                        afficher_substitut('Poissons', liste_sauvegarde)
                     elif choix_categorie == 5:
-                        afficher_substitut('Snacks')
+                        afficher_substitut('Snacks', liste_sauvegarde)
 
                     choix_fin_de_recherche = 0
                     while choix_fin_de_recherche < 1 or choix_fin_de_recherche > 3:
@@ -139,11 +80,7 @@ while boucle_principale:
                             boucle_principale == True
 
                         if choix_fin_de_recherche == 2:
-                            sql_insert_query = """ INSERT INTO Favorite (product_id, substitute_id, date_heure, pseudo) VALUES (%s, %s, %s, %s)"""
-                            mycursor.execute(sql_insert_query, (liste_sauvegarde[0], liste_sauvegarde[1], now, nom_good_format))
-                            print('Votre recherche est bien enregistrée')
-                            mydb.commit()
-                            liste_sauvegarde = []
+                            sauvegarder_pdt(liste_sauvegarde, nom_good_format)
                             choix_final = 0
                             while choix_final < 1 or choix_final > 2:
                                 choix_final = input("Vous souhaitez : " '\n'
@@ -172,20 +109,7 @@ while boucle_principale:
                             boucle_principale = False
 
             if choix_1 == 2:
-                mycursor.execute(""" SELECT product_id, substitute_id FROM Favorite WHERE pseudo = %s""", (nom_good_format,))
-                result = mycursor.fetchall()
-                for x in result:
-                    good_pdt = []
-                    bad_pdt = []
-                    y = x[0]    
-                    z = x[1]
-                    good_pdt.append(y)
-                    bad_pdt.append(z)
-                    mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (good_pdt[0],))
-                    result = mycursor.fetchall()
-                    mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (bad_pdt[0],))
-                    result2 = mycursor.fetchall()
-                    print('Le produit : ', result[0][0], 'a été remplacé par le produit : ', result2[0][0])
+                afficher_pdt_sauvegarde(nom_good_format)
 
                 choix_final = 0
                 while choix_final < 1 or choix_final > 2:

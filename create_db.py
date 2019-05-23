@@ -4,7 +4,7 @@ import mysql.connector
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
-  password="********"
+  password="***"
 )
 mycursor = mydb.cursor()
 
@@ -66,7 +66,7 @@ mycursor.execute(""" CREATE TABLE Favorite (
 	substitute_id BIGINT UNSIGNED NOT NULL,
 	date_heure DATETIME,
 	pseudo VARCHAR(30) NOT NULL,
-	PRIMARY KEY(product_id,substitute_id, pseudo),
+	PRIMARY KEY(product_id, substitute_id, pseudo),
 	CONSTRAINT fk_product_id_code
 		FOREIGN KEY (product_id)
 		REFERENCES Product(code),
