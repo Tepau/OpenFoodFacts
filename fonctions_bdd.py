@@ -6,10 +6,10 @@ now = datetime.now()
 from fonctions import gerer_erreur_saisie
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="tEPAU1992",
-  database="appli"
+  host="******",
+  user="*****",
+  password="******",
+  database="****"
 )
 mycursor = mydb.cursor()
 def insert_product(liste_products):
