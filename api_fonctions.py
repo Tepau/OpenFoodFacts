@@ -1,4 +1,5 @@
 from constantes import CATEGORIES
+
 def final_structure(liste_pdt_recuperes):
 
     sorted_categories =[]                

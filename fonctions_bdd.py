@@ -4,14 +4,16 @@ import random
 from datetime import datetime
 now = datetime.now()
 from fonctions import gerer_erreur_saisie
+from constantes import QUESTION_CHOIX_PRODUIT
 
 mydb = mysql.connector.connect(
   host="******",
-  user="*****",
+  user="******",
   password="******",
-  database="****"
+  database="******"
 )
 mycursor = mydb.cursor()
+
 def insert_product(liste_products):
     for product in liste_products:
         code = product[0]
@@ -69,32 +71,29 @@ def afficher_substitut(categorie, liste_de_sauvegarde):
     for result in myresult:
         print(x, ':', result[0])
         x += 1
-    choix_final_2 = 0
-    while choix_final_2 < 1 or choix_final_2 > x-1:
-        choix_final_2 = input("Tapez le numéro associé au produit que vous voulez substituer : ")
+    choix_final_2 = gerer_erreur_saisie(1, x-1, QUESTION_CHOIX_PRODUIT)
 
-        choix_final_2 = gerer_erreur_saisie(choix_final_2, 1, x-1)
+    if choix_final_2 > 0 and choix_final_2 < x:
+        code_pdt_substitue = myresult[choix_final_2 - 1][1]
+        liste_de_sauvegarde.append(code_pdt_substitue)
 
-        if choix_final_2 > 0 and choix_final_2 < x:
-            code_pdt_substitue = myresult[choix_final_2 - 1][1]
-            liste_de_sauvegarde.append(code_pdt_substitue)
+        if choix_final_2 < x:
+            mycursor.execute("""SELECT product_name_fr, url, generic_name_fr, store_name, code \
+            FROM Product \
+            INNER JOIN Category_product ON Product.code = Category_product.product_id \
+            INNER JOIN Category ON Category.id = Category_product.category_id \
+            INNER JOIN Store_product ON Product.code = Store_product.product_id \
+            INNER JOIN Store ON Store.id = Store_product.store_id \
+            WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (categorie,))
+            myresult = mycursor.fetchall() 
+            aleatoire = random.choice(myresult)
+            code_pdt_de_substitution = aleatoire[4]
+            liste_de_sauvegarde.append(code_pdt_de_substitution)
+            print('Pour remplacer ce produit, nous vous proposons : ', aleatoire[0], '\n',
+                'La description de ce produit est : ', aleatoire[2], '\n',
+                'Il est disponible dans le(s) magasin(s) suivant(s) : ', aleatoire[3], '\n',
+                'Son url est la suivante : ', aleatoire[1])
 
-            if choix_final_2 < x:
-                mycursor.execute("""SELECT product_name_fr, url, generic_name_fr, store_name, code \
-                FROM Product \
-                INNER JOIN Category_product ON Product.code = Category_product.product_id \
-                INNER JOIN Category ON Category.id = Category_product.category_id \
-                INNER JOIN Store_product ON Product.code = Store_product.product_id \
-                INNER JOIN Store ON Store.id = Store_product.store_id \
-                WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (categorie,))
-                myresult = mycursor.fetchall() 
-                aleatoire = random.choice(myresult)
-                code_pdt_de_substitution = aleatoire[4]
-                liste_de_sauvegarde.append(code_pdt_de_substitution)
-                print('Pour remplacer ce produit, nous vous proposons : ', aleatoire[0], '\n',
-                    'La description de ce produit est : ', aleatoire[2], '\n',
-                    'Il est disponible dans le(s) magasin(s) suivant(s) : ', aleatoire[3], '\n',
-                    'Son url est la suivante : ', aleatoire[1])
 
 
 def sauvegarder_pdt(liste_de_sauvegarde, name_user):
@@ -137,4 +136,4 @@ def bon_format(liste):
         if bon_nom != '':
             toutes_cat.append(bon_nom)
     return toutes_cat
-    
+    ******

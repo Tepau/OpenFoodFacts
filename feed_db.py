@@ -1,6 +1,5 @@
 import requests
 from constantes import *
-from fonctions import *
 from fonctions_bdd import *
 from get_api import final_format
 
