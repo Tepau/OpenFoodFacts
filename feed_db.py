@@ -1,7 +1,7 @@
 import requests
-from constantes import *
-from fonctions_bdd import *
-from get_api import final_format
+from constants import *
+from functions_db import *
+from service import final_format
 
 
 all_category = []

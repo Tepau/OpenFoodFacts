@@ -3,14 +3,14 @@ import mysql.connector
 import random
 from datetime import datetime
 now = datetime.now()
-from fonctions import manage_typing_error
-from constantes import QUESTION_CHOICE_PRODUCT
+from functions import manage_typing_error
+from constants import QUESTION_CHOICE_PRODUCT
 
 mydb = mysql.connector.connect(
-  host="*****",
-  user="*****",
-  password="*****",
-  database="*****"
+  host="****",
+  user="****",
+  password="****",
+  database="****"
 )
 mycursor = mydb.cursor()
 
@@ -123,7 +123,7 @@ def no_doublons_good_format(selection_list, products_list, index):
         selection = product[index]
         valid_format = selection.split(",")
         for name in valid_format:
-            valid_name = nom.lower().strip()
+            valid_name = name.lower().strip()
             if valid_name not in selection_list and valid_name != '':
                 selection_list.append(valid_name)
     return selection_list
@@ -133,6 +133,6 @@ def valid_format(list_to_convert):
     for name in list_to_convert:
         valid_name = name.strip()
         if valid_name != '':
-            valid_selection.append(valid_name)
+            valid_list.append(valid_name)
     return valid_list
     

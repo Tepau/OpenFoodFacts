@@ -1,6 +1,6 @@
-from fonctions_bdd import display_substitut, display_saved_product, save_product
-from fonctions import manage_typing_error
-from constantes import MAIN_QUESTION, QUESTION_CATEGORY, QUESTION_END_RESEARCH, QUESTION_AFTER_RECORDING
+from functions_db import display_substitut, display_saved_product, save_product
+from functions import manage_typing_error
+from constants import MAIN_QUESTION, QUESTION_CATEGORY, QUESTION_END_RESEARCH, QUESTION_AFTER_RECORDING
 
 name = input("Entrez votre pseudo: ")
 name_good_format = name.lower()
@@ -33,7 +33,7 @@ while main_loop:
             main_loop == True
 
         if end_research_choice == 2:
-            save_product(saved_list, nom_good_format)
+            save_product(saved_list, name_good_format)
             final_choice = manage_typing_error(1, 2, QUESTION_AFTER_RECORDING)
 
             if final_choice == 1:
@@ -47,7 +47,7 @@ while main_loop:
             main_loop = False
 
     if choice_1 == 2:
-        display_saved_product(nom_good_format)
+        display_saved_product(name_good_format)
 
         final_choice = manage_typing_error(1, 2, QUESTION_AFTER_RECORDING)
         if final_choice == 1:
