@@ -1,6 +1,3 @@
-OpenFoodFacts Projet n°5
-========================
-
 ## Utilisez les données publiques de l'OpenFoodFacts
 
 ### Installer Python 3.7.3 en suivant le lien suivant
