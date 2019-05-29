@@ -8,22 +8,22 @@ https://www.python.org/downloads/
 ### Base de données utilisée : MySQL
 https://dev.mysql.com/downloads/installer/ 
 
-### Créer la base de donnée à l'aide du fichier tables.sql
+Créer la base de donnée à l'aide du fichier tables.sql
 
-### Dans l'invite de commande installer Virtualenv en exécutant la commande suivante
+### Virtualenv en exécutant la commande suivante
     pip install virtualenv
 
-### Dans l'invite de commande, se déplacer dans le dossier contenant le projet et créer un environnement virtuel grâce à la commande suivante :
+### Se déplacer dans le dossier contenant le projet et créer un environnement virtuel grâce à la commande suivante :
     python -m venv env
 
-### Dans l'invite de commande se déplacer le fichier scripts en effectuant la commande suivante
+### Se déplacer le fichier scripts en effectuant la commande suivante
     cd env 
     cd scripts
 
 ### Activer l'environnement virtuel
-  activate.bat
-
-### Revenir dans le dossier contenant le projet
+    activate.bat
+    
+Revenir dans le dossier contenant le projet
 
 ### Installer les dépendances nécessaires :
     pip install -r requirements.txt
