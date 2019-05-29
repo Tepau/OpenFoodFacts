@@ -3,7 +3,7 @@
 ## Installer Python 3.7.3 en suivant le lien suivant
 https://www.python.org/downloads/ 
 
-## Cloner ou télécharge le projet
+### Cloner ou télécharge le projet
 
 ## Base de données utilisée : MySQL
 https://dev.mysql.com/downloads/installer/ 
@@ -40,7 +40,7 @@ Revenir dans le dossier contenant le projet
     
    
 
-# Fonctionnalités:
+## Fonctionnalités:
 
 ### S'identifier
     -Indiquez votre pseudo pour vous identifier
