@@ -1,6 +1,5 @@
 import requests
-from constants import *
-from functions_db import *
+from functions_db import no_doublons_good_format, insert_category, insert_store, insert_product, insert_category_and_store_product, mydb
 from service import final_format
 
 

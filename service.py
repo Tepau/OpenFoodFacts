@@ -1,6 +1,6 @@
 import requests
 from api_functions import *
-from constants import *
+from constants import CATEGORIES, GRADES
 
 all_products = []
 api = 'https://fr.openfoodfacts.org/cgi/search.pl'
