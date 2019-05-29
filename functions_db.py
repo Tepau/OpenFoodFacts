@@ -3,14 +3,14 @@ import mysql.connector
 import random
 from datetime import datetime
 now = datetime.now()
-from fonctions import gerer_erreur_saisie
-from constantes import QUESTION_CHOIX_PRODUIT
+from fonctions import manage_typing_error
+from constantes import QUESTION_CHOICE_PRODUCT
 
 mydb = mysql.connector.connect(
-  host="******",
-  user="******",
-  password="******",
-  database="******"
+  host="*****",
+  user="*****",
+  password="*****",
+  database="*****"
 )
 mycursor = mydb.cursor()
 
@@ -24,16 +24,16 @@ def insert_product(liste_products):
         sql_insert_query = """INSERT INTO Product (code, product_name_fr, nutrition_grade_fr, url, generic_name_fr) VALUES (%s, %s, %s, %s, %s)"""
         mycursor.execute(sql_insert_query, (code, name, grade, url, description))
 
-def insert_category_and_store_product(liste_products, index_categorie, index_store):
+def insert_category_and_store_product(liste_products, category_index, store_index):
     for product in liste_products:
         code = product[0]
-        cat = product[index_categorie].split(",")
-        categories = bon_format(cat)
-        sto = product[index_store].split(",")
-        stores = bon_format(sto)
-        for categorie in categories:
+        cat = product[category_index].split(",")
+        categories = valid_format(cat)
+        sto = product[store_index].split(",")
+        stores = valid_format(sto)
+        for category in categories:
             sql_insert_query3 =  """SELECT id FROM Category WHERE category_name =%s """
-            mycursor.execute(sql_insert_query3, (categorie,))
+            mycursor.execute(sql_insert_query3, (category,))
             nb_categories = mycursor.fetchall()
             result = nb_categories[0][0]
             sql_insert_query2 = """INSERT INTO Category_product (product_id, category_id) VALUES (%s, %s)"""
@@ -47,93 +47,92 @@ def insert_category_and_store_product(liste_products, index_categorie, index_sto
                 mycursor.execute(sql_insert_query2, (code, result))
 
 
-def insert_store(liste_stores):
-    for store in liste_stores:
+def insert_store(stores_list):
+    for store in stores_list:
         sql_insert_query = """ INSERT INTO Store (store_name) VALUES (%s)"""
         mycursor.execute(sql_insert_query, (store,))
 
 
-def insert_category(liste_categories):
-    for category in liste_categories:
+def insert_category(categories_list):
+    for category in categories_list:
         sql_insert_query = """INSERT INTO Category (category_name) VALUES (%s)"""
         mycursor.execute(sql_insert_query, (category,))
 
-def afficher_substitut(categorie, liste_de_sauvegarde):
+def display_substitut(category, saved_list):
 
     mycursor.execute("""SELECT product_name_fr, code \
         FROM Product \
         INNER JOIN Category_product ON Product.code = Category_product.product_id \
         INNER JOIN Category ON Category.id = Category_product.category_id \
-        WHERE category_name = %s AND nutrition_grade_fr = 'e' """, (categorie,))
+        WHERE category_name = %s AND nutrition_grade_fr = 'e' """, (category,))
     myresult = mycursor.fetchall()
     x = 1
     print("Voici la sélection de produits : ")
     for result in myresult:
         print(x, ':', result[0])
         x += 1
-    choix_final_2 = gerer_erreur_saisie(1, x-1, QUESTION_CHOIX_PRODUIT)
+    final_choice = manage_typing_error(1, x-1, QUESTION_CHOICE_PRODUCT)
 
-    if choix_final_2 > 0 and choix_final_2 < x:
-        code_pdt_substitue = myresult[choix_final_2 - 1][1]
-        liste_de_sauvegarde.append(code_pdt_substitue)
+    if final_choice > 0 and final_choice < x:
+        substituted_product_code = myresult[final_choice - 1][1]
+        saved_list.append(substituted_product_code)
 
-        if choix_final_2 < x:
+        if final_choice < x:
             mycursor.execute("""SELECT product_name_fr, url, generic_name_fr, store_name, code \
             FROM Product \
             INNER JOIN Category_product ON Product.code = Category_product.product_id \
             INNER JOIN Category ON Category.id = Category_product.category_id \
             INNER JOIN Store_product ON Product.code = Store_product.product_id \
             INNER JOIN Store ON Store.id = Store_product.store_id \
-            WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (categorie,))
+            WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (category,))
             myresult = mycursor.fetchall() 
-            aleatoire = random.choice(myresult)
-            code_pdt_de_substitution = aleatoire[4]
-            liste_de_sauvegarde.append(code_pdt_de_substitution)
-            print('Pour remplacer ce produit, nous vous proposons : ', aleatoire[0], '\n',
-                'La description de ce produit est : ', aleatoire[2], '\n',
-                'Il est disponible dans le(s) magasin(s) suivant(s) : ', aleatoire[3], '\n',
-                'Son url est la suivante : ', aleatoire[1])
+            random_product = random.choice(myresult)
+            substitution_product_code = random_product[4]
+            saved_list.append(substitution_product_code)
+            print('Pour remplacer ce produit, nous vous proposons : ', random_product[0], '\n',
+                'La description de ce produit est : ', random_product[2], '\n',
+                'Il est disponible dans le(s) magasin(s) suivant(s) : ', random_product[3], '\n',
+                'Son url est la suivante : ', random_product[1])
 
 
-
-def sauvegarder_pdt(liste_de_sauvegarde, name_user):
+def save_product(saved_list, name_user):
     sql_insert_query = """ INSERT INTO Favorite (product_id, substitute_id, date_heure, pseudo) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE product_id = %s, substitute_id = %s, date_heure = %s, pseudo = %s"""
-    mycursor.execute(sql_insert_query, (liste_de_sauvegarde[0], liste_de_sauvegarde[1], now, name_user, liste_de_sauvegarde[0], liste_de_sauvegarde[1], now, name_user))
+    mycursor.execute(sql_insert_query, (saved_list[0], saved_list[1], now, name_user, saved_list[0], saved_list[1], now, name_user))
     print('Votre recherche est bien enregistrée')
     mydb.commit()
-    liste_de_sauvegarde = []
+    saved_list = []
 
-def afficher_pdt_sauvegarde(name_user):
+def display_saved_product(name_user):
     mycursor.execute(""" SELECT product_id, substitute_id FROM Favorite WHERE pseudo = %s""", (name_user,))
     result = mycursor.fetchall()
     for x in result:
-        good_pdt = []
-        bad_pdt = []
+        good_product = []
+        bad_product = []
         y = x[0]    
         z = x[1]
-        good_pdt.append(y)
-        bad_pdt.append(z)
-        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (good_pdt[0],))
+        good_product.append(y)
+        bad_product.append(z)
+        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (good_product[0],))
         result = mycursor.fetchall()
-        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (bad_pdt[0],))
+        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (bad_product[0],))
         result2 = mycursor.fetchall()
         print('Le produit : ', result[0][0], 'a été remplacé par le produit : ', result2[0][0])
 
-def no_doublons_good_format(liste_selection, liste_produits, index):
-    for product in liste_produits:
+def no_doublons_good_format(selection_list, products_list, index):
+    for product in products_list:
         selection = product[index]
-        bon_format = selection.split(",")
-        for nom in bon_format:
-            bon_nom = nom.lower().strip()
-            if bon_nom not in liste_selection and bon_nom != '':
-                liste_selection.append(bon_nom)
-    return liste_selection
+        valid_format = selection.split(",")
+        for name in valid_format:
+            valid_name = nom.lower().strip()
+            if valid_name not in selection_list and valid_name != '':
+                selection_list.append(valid_name)
+    return selection_list
 
-def bon_format(liste):
-    toutes_cat = []
-    for nom in liste:
-        bon_nom = nom.strip()
-        if bon_nom != '':
-            toutes_cat.append(bon_nom)
-    return toutes_cat
-    ******
+def valid_format(list_to_convert):
+    valid_list = []
+    for name in list_to_convert:
+        valid_name = name.strip()
+        if valid_name != '':
+            valid_selection.append(valid_name)
+    return valid_list
+    
