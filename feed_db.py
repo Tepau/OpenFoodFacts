@@ -1,4 +1,3 @@
-import requests
 from functions_db import no_duplicates_good_format, insert_category, insert_store, insert_product, insert_category_and_store_product, mydb
 from service import final_format
 
@@ -23,4 +22,5 @@ insert_product(final_format)
 # Filling tables Category_product and Store_product
 insert_category_and_store_product(final_format, 5, 1)
 
+# Save insertions in database
 mydb.commit()

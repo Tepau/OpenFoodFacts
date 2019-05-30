@@ -1,5 +1,5 @@
 import requests
-from api_functions import *
+from api_functions import valid_product, final_structure
 from constants import CATEGORIES, GRADES
 
 all_products = []
@@ -24,7 +24,8 @@ for category in CATEGORIES:
 
 selected_products = []
 keys = ('code', 'product_name',
-        'categories', 'url', 'nutrition_grade_fr', 'stores', 'generic_name_fr')
+        'categories', 'url', 'nutrition_grade_fr',
+        'stores', 'generic_name_fr')
 for product in all_products:
     if valid_product(keys, product) == True:
         categorie = product['categories']
@@ -32,8 +33,8 @@ for product in all_products:
         barcode = product['code']
         nom = product['product_name']
         url = product['url']
-        nutrition_grade = product['nutrition_grade_fr']  
-        description = product['generic_name_fr']       
+        nutrition_grade = product['nutrition_grade_fr']
+        description = product['generic_name_fr']
         key = (barcode, stores, nom, url, nutrition_grade, categorie, description)
         selected_products.append(key)
 

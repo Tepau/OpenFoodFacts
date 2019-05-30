@@ -2,7 +2,6 @@ import mysql
 import mysql.connector
 import random
 from datetime import datetime
-now = datetime.now()
 from functions import manage_typing_error
 from constants import QUESTION_CHOICE_PRODUCT
 
@@ -13,6 +12,9 @@ mydb = mysql.connector.connect(
   database="****"
 )
 mycursor = mydb.cursor()
+
+now = datetime.now()
+
 
 def insert_product(liste_products):
     """Inserts the recovered products into the database"""
@@ -26,6 +28,7 @@ def insert_product(liste_products):
         sql_insert_query = """INSERT INTO Product (code, product_name_fr, nutrition_grade_fr, url, generic_name_fr) VALUES (%s, %s, %s, %s, %s)"""
         mycursor.execute(sql_insert_query, (code, name, grade, url, description))
 
+
 def insert_category_and_store_product(liste_products, category_index, store_index):
     """ Fill tables category_product and store_product"""
 
@@ -36,14 +39,14 @@ def insert_category_and_store_product(liste_products, category_index, store_inde
         sto = product[store_index].split(",")
         stores = valid_format(sto)
         for category in categories:
-            sql_insert_query3 =  """SELECT id FROM Category WHERE category_name =%s """
+            sql_insert_query3 = """SELECT id FROM Category WHERE category_name =%s """
             mycursor.execute(sql_insert_query3, (category,))
             nb_categories = mycursor.fetchall()
             result = nb_categories[0][0]
             sql_insert_query2 = """INSERT INTO Category_product (product_id, category_id) VALUES (%s, %s)"""
             mycursor.execute(sql_insert_query2, (code, result))
             for store in stores:
-                sql_insert_query3 =  """SELECT id FROM Store WHERE store_name =%s """
+                sql_insert_query3 = """SELECT id FROM Store WHERE store_name =%s """
                 mycursor.execute(sql_insert_query3, (store,))
                 nb_stores = mycursor.fetchall()
                 result = nb_stores[0][0]
@@ -65,6 +68,7 @@ def insert_category(categories_list):
     for category in categories_list:
         sql_insert_query = """INSERT INTO Category (category_name) VALUES (%s)"""
         mycursor.execute(sql_insert_query, (category,))
+
 
 def display_substitut(category, saved_list):
 
@@ -93,14 +97,14 @@ def display_substitut(category, saved_list):
             INNER JOIN Store_product ON Product.code = Store_product.product_id \
             INNER JOIN Store ON Store.id = Store_product.store_id \
             WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (category,))
-            myresult = mycursor.fetchall() 
+            myresult = mycursor.fetchall()
             random_product = random.choice(myresult)
             substitution_product_code = random_product[4]
             saved_list.append(substitution_product_code)
             print('Pour remplacer ce produit, nous vous proposons : ', random_product[0], '\n',
-                'La description de ce produit est : ', random_product[2], '\n',
-                'Il est disponible dans le(s) magasin(s) suivant(s) : ', random_product[3], '\n',
-                'Son url est la suivante : ', random_product[1])
+                  'La description de ce produit est : ', random_product[2], '\n',
+                  'Il est disponible dans le(s) magasin(s) suivant(s) : ', random_product[3], '\n',
+                  'Son url est la suivante : ', random_product[1])
 
 
 def save_product(saved_list, name_user):
@@ -112,6 +116,7 @@ def save_product(saved_list, name_user):
     mydb.commit()
     saved_list = []
 
+
 def display_saved_product(name_user):
     """Display a saved research """
 
@@ -120,7 +125,7 @@ def display_saved_product(name_user):
     for x in result:
         good_product = []
         bad_product = []
-        y = x[0]    
+        y = x[0]
         z = x[1]
         good_product.append(y)
         bad_product.append(z)
@@ -130,9 +135,10 @@ def display_saved_product(name_user):
         result2 = mycursor.fetchall()
         print('Le produit : ', result[0][0], 'a été remplacé par le produit : ', result2[0][0])
 
+
 def no_duplicates_good_format(selection_list, products_list, index):
     """Read a list that has several times the same data and creating a new list without duplicates """
-    
+
     for product in products_list:
         selection = product[index]
         valid_format = selection.split(",")
@@ -141,6 +147,7 @@ def no_duplicates_good_format(selection_list, products_list, index):
             if valid_name not in selection_list and valid_name != '':
                 selection_list.append(valid_name)
     return selection_list
+
 
 def valid_format(list_to_convert):
     """ Retrun a clean list, without spaces and empty names"""
@@ -151,4 +158,3 @@ def valid_format(list_to_convert):
         if valid_name != '':
             valid_list.append(valid_name)
     return valid_list
-    

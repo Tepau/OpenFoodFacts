@@ -4,7 +4,7 @@ CATEGORIES = ['Sandwichs',
               'Poissons',
               'Snacks']
 
-GRADES = ['a','e']
+GRADES = ['a', 'e']
 
 MAIN_QUESTION = "Que souhaitez vous faire? : \n \
 1 : Rechercher un produit \n \

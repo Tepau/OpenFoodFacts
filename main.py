@@ -9,7 +9,7 @@ main_loop = True
 
 while main_loop:
     saved_list = []
- 
+
     choice_1 = manage_typing_error(1, 3, MAIN_QUESTION)
 
     if choice_1 == 1:
@@ -19,7 +19,7 @@ while main_loop:
         if category_choice == 1:
             display_substitut('Sandwichs', saved_list)
         if category_choice == 2:
-            display_substitut('Conserves', saved_list) 
+            display_substitut('Conserves', saved_list)
         if category_choice == 3:
             display_substitut('Viandes', saved_list)
         if category_choice == 4:
@@ -27,17 +27,17 @@ while main_loop:
         if category_choice == 5:
             display_substitut('Snacks', saved_list)
 
-        end_research_choice = manage_typing_error (1, 3, QUESTION_END_RESEARCH)
+        end_research_choice = manage_typing_error(1, 3, QUESTION_END_RESEARCH)
 
         if end_research_choice == 1:
-            main_loop == True
+            main_loop is True
 
         if end_research_choice == 2:
             save_product(saved_list, name_good_format)
             final_choice = manage_typing_error(1, 2, QUESTION_AFTER_RECORDING)
 
             if final_choice == 1:
-                main_loop = True
+                main_loop is True
             elif final_choice == 2:
                 print('Bye Bye')
                 main_loop = False
@@ -51,12 +51,11 @@ while main_loop:
 
         final_choice = manage_typing_error(1, 2, QUESTION_AFTER_RECORDING)
         if final_choice == 1:
-            main_loop = True
+            main_loop is True
         elif final_choice == 2:
             print("Bye Bye")
             main_loop = False
 
     if choice_1 == 3:
-            print('Bye bye')
-            main_loop = False
-
+        print('Bye bye')
+        main_loop = False
