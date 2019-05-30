@@ -15,6 +15,8 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 def insert_product(liste_products):
+    """Inserts the recovered products into the database"""
+
     for product in liste_products:
         code = product[0]
         name = product[2]
@@ -25,6 +27,8 @@ def insert_product(liste_products):
         mycursor.execute(sql_insert_query, (code, name, grade, url, description))
 
 def insert_category_and_store_product(liste_products, category_index, store_index):
+    """ Fill tables category_product and store_product"""
+
     for product in liste_products:
         code = product[0]
         cat = product[category_index].split(",")
@@ -48,12 +52,16 @@ def insert_category_and_store_product(liste_products, category_index, store_inde
 
 
 def insert_store(stores_list):
+    """Inserts the recovered stores into the database"""
+
     for store in stores_list:
         sql_insert_query = """ INSERT INTO Store (store_name) VALUES (%s)"""
         mycursor.execute(sql_insert_query, (store,))
 
 
 def insert_category(categories_list):
+    """Inserts the recovered categories into the database"""
+
     for category in categories_list:
         sql_insert_query = """INSERT INTO Category (category_name) VALUES (%s)"""
         mycursor.execute(sql_insert_query, (category,))
@@ -96,6 +104,8 @@ def display_substitut(category, saved_list):
 
 
 def save_product(saved_list, name_user):
+    """ Save a research """
+
     sql_insert_query = """ INSERT INTO Favorite (product_id, substitute_id, date_heure, pseudo) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE product_id = %s, substitute_id = %s, date_heure = %s, pseudo = %s"""
     mycursor.execute(sql_insert_query, (saved_list[0], saved_list[1], now, name_user, saved_list[0], saved_list[1], now, name_user))
     print('Votre recherche est bien enregistrée')
@@ -103,6 +113,8 @@ def save_product(saved_list, name_user):
     saved_list = []
 
 def display_saved_product(name_user):
+    """Display a saved research """
+
     mycursor.execute(""" SELECT product_id, substitute_id FROM Favorite WHERE pseudo = %s""", (name_user,))
     result = mycursor.fetchall()
     for x in result:
@@ -118,7 +130,9 @@ def display_saved_product(name_user):
         result2 = mycursor.fetchall()
         print('Le produit : ', result[0][0], 'a été remplacé par le produit : ', result2[0][0])
 
-def no_doublons_good_format(selection_list, products_list, index):
+def no_duplicates_good_format(selection_list, products_list, index):
+    """Read a list that has several times the same data and creating a new list without duplicates """
+    
     for product in products_list:
         selection = product[index]
         valid_format = selection.split(",")
@@ -129,6 +143,8 @@ def no_doublons_good_format(selection_list, products_list, index):
     return selection_list
 
 def valid_format(list_to_convert):
+    """ Retrun a clean list, without spaces and empty names"""
+
     valid_list = []
     for name in list_to_convert:
         valid_name = name.strip()

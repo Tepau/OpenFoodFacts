@@ -1,13 +1,18 @@
 from constants import CATEGORIES
 
 def final_structure(recovered_product_list):
+    """ Returns a format suitable for insertion into the database
 
-    sorted_categories =[]                
+    only the names of the searched categories are kept
+    
+    """
+
+    sorted_categories = []                
     for product in recovered_product_list:
-        list_product = list(product) #transformation du tuple d'un produit en liste
-        list_categories = list_product[5].split(",") #transformation des categories sous forme de liste
-        clean_categories_no_space =[] # Variables vide qui va contenir la liste des categories sans espaces
-        final_categories =[] #Variable vide qui va contenir les categories que l'on veut et qui sont présentes
+        list_product = list(product) 
+        list_categories = list_product[5].split(",") 
+        clean_categories_no_space = [] 
+        final_categories = [] 
         for categorie in list_categories:
             no_space = categorie.strip()
             clean_categories_no_space.append(no_space)
@@ -28,6 +33,8 @@ def final_structure(recovered_product_list):
     return final_format
 
 def valid_product(keys, all_products):
+    """ Returns true if all the desired keys are in the dictionary  """
+
     for key in keys:
         if key not in all_products:
             return False

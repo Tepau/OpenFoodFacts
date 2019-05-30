@@ -39,7 +39,7 @@ while main_loop:
             if final_choice == 1:
                 main_loop = True
             elif final_choice == 2:
-                print("Au revoir ! ")
+                print('Bye Bye')
                 main_loop = False
 
         if end_research_choice == 3:
