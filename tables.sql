@@ -1,10 +1,14 @@
- CREATE TABLE Product (
+DROP DATABASE Appli ;
+CREATE DATABASE Appli;
+use Appli
+
+CREATE TABLE Product (
 	id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	code BIGINT UNSIGNED NOT NULL UNIQUE,
 	product_name_fr VARCHAR(150) NOT NULL ,
 	nutrition_grade_fr CHAR(1) NOT NULL,
 	url VARCHAR(400),
-	generic_name_fr VARCHAR(200)
+	generic_name_fr VARCHAR(400) 
 	);
 
 
@@ -57,3 +61,16 @@ CREATE TABLE Favorite (
 		FOREIGN KEY (substitute_id)
 		REFERENCES Product(code)
 	);
+
+DELIMITER |
+CREATE TRIGGER after_insert_product BEFORE INSERT
+ON Product FOR EACH ROW
+BEGIN
+    IF NEW.generic_name_fr = ''
+      THEN
+        SET NEW.generic_name_fr = 'Pas de description pour l''instant';
+    END IF;
+END |
+DELIMITER ;
+
+

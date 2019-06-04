@@ -6,10 +6,11 @@ from functions import manage_typing_error
 from constants import QUESTION_CHOICE_PRODUCT
 
 mydb = mysql.connector.connect(
-  host="****",
-  user="****",
-  password="****",
-  database="****"
+  host="localhost",
+  user="root",
+  password="tEPAU1992",
+  database="appli",
+  charset='utf8'
 )
 mycursor = mydb.cursor()
 

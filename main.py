@@ -23,7 +23,7 @@ while main_loop:
         if category_choice == 3:
             display_substitut('Viandes', saved_list)
         if category_choice == 4:
-            display_substitut('Poissons', saved_list)
+            display_substitut('Plats préparés', saved_list)
         if category_choice == 5:
             display_substitut('Snacks', saved_list)
 

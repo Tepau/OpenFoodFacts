@@ -15,7 +15,7 @@ for category in CATEGORIES:
             'tag_contains_1': 'contains',
             'tag_1': grade,
             'sort_by': 'categories',
-            'page_size': 3,
+            'page_size': 4,
             'json': 1
                     }
         response = requests.get(api, params=config)
@@ -27,7 +27,7 @@ keys = ('code', 'product_name',
         'categories', 'url', 'nutrition_grade_fr',
         'stores', 'generic_name_fr')
 for product in all_products:
-    if valid_product(keys, product) == True:
+    if valid_product(keys, product):
         categorie = product['categories']
         stores = product['stores']
         barcode = product['code']
