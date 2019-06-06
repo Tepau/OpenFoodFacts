@@ -1,6 +1,7 @@
 from functions_db import display_substitut, display_saved_product, save_product
 from functions import manage_typing_error
-from constants import MAIN_QUESTION, QUESTION_CATEGORY, QUESTION_END_RESEARCH, QUESTION_AFTER_RECORDING
+from constants import MAIN_QUESTION, QUESTION_CATEGORY,\
+                      QUESTION_END_RESEARCH, QUESTION_AFTER_RECORDING
 
 name = input("Entrez votre pseudo: ")
 name_good_format = name.lower()

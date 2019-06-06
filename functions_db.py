@@ -6,11 +6,11 @@ from functions import manage_typing_error
 from constants import QUESTION_CHOICE_PRODUCT
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="tEPAU1992",
-  database="appli",
-  charset='utf8'
+  host="****",
+  user="****",
+  password="****",
+  database="****",
+  charset="utf8"
 )
 mycursor = mydb.cursor()
 
@@ -26,7 +26,8 @@ def insert_product(liste_products):
         grade = product[4]
         url = product[3]
         description = product[6]
-        sql_insert_query = """INSERT INTO Product (code, product_name_fr, nutrition_grade_fr, url, generic_name_fr) VALUES (%s, %s, %s, %s, %s)"""
+        sql_insert_query = """INSERT INTO Product (code, product_name_fr, nutrition_grade_fr, url, generic_name_fr)\
+                              VALUES (%s, %s, %s, %s, %s)"""
         mycursor.execute(sql_insert_query, (code, name, grade, url, description))
 
 
@@ -40,14 +41,16 @@ def insert_category_and_store_product(liste_products, category_index, store_inde
         sto = product[store_index].split(",")
         stores = valid_format(sto)
         for category in categories:
-            sql_insert_query3 = """SELECT id FROM Category WHERE category_name =%s """
+            sql_insert_query3 = """SELECT id FROM Category \
+                                   WHERE category_name =%s """
             mycursor.execute(sql_insert_query3, (category,))
             nb_categories = mycursor.fetchall()
             result = nb_categories[0][0]
             sql_insert_query2 = """INSERT INTO Category_product (product_id, category_id) VALUES (%s, %s)"""
             mycursor.execute(sql_insert_query2, (code, result))
             for store in stores:
-                sql_insert_query3 = """SELECT id FROM Store WHERE store_name =%s """
+                sql_insert_query3 = """SELECT id FROM Store \
+                                       WHERE store_name =%s """
                 mycursor.execute(sql_insert_query3, (store,))
                 nb_stores = mycursor.fetchall()
                 result = nb_stores[0][0]
@@ -75,8 +78,10 @@ def display_substitut(category, saved_list):
 
     mycursor.execute("""SELECT product_name_fr, code \
         FROM Product \
-        INNER JOIN Category_product ON Product.code = Category_product.product_id \
-        INNER JOIN Category ON Category.id = Category_product.category_id \
+        INNER JOIN Category_product \
+        ON Product.code = Category_product.product_id \
+        INNER JOIN Category ON \
+        Category.id = Category_product.category_id \
         WHERE category_name = %s AND nutrition_grade_fr = 'e' """, (category,))
     myresult = mycursor.fetchall()
     x = 1
@@ -93,10 +98,14 @@ def display_substitut(category, saved_list):
         if final_choice < x:
             mycursor.execute("""SELECT product_name_fr, url, generic_name_fr, store_name, code \
             FROM Product \
-            INNER JOIN Category_product ON Product.code = Category_product.product_id \
-            INNER JOIN Category ON Category.id = Category_product.category_id \
-            INNER JOIN Store_product ON Product.code = Store_product.product_id \
-            INNER JOIN Store ON Store.id = Store_product.store_id \
+            INNER JOIN Category_product \
+            ON Product.code = Category_product.product_id \
+            INNER JOIN Category \
+            ON Category.id = Category_product.category_id \
+            INNER JOIN Store_product \
+            ON Product.code = Store_product.product_id \
+            INNER JOIN Store \
+            ON Store.id = Store_product.store_id \
             WHERE category_name = %s AND nutrition_grade_fr = 'a' """, (category,))
             myresult = mycursor.fetchall()
             random_product = random.choice(myresult)
@@ -111,7 +120,10 @@ def display_substitut(category, saved_list):
 def save_product(saved_list, name_user):
     """ Save a research """
 
-    sql_insert_query = """ INSERT INTO Favorite (product_id, substitute_id, date_heure, pseudo) VALUES (%s, %s, %s, %s) ON DUPLICATE KEY UPDATE product_id = %s, substitute_id = %s, date_heure = %s, pseudo = %s"""
+    sql_insert_query = """ INSERT INTO Favorite (product_id, substitute_id, date_heure, pseudo) \
+                           VALUES (%s, %s, %s, %s) \
+                           ON DUPLICATE KEY \
+                           UPDATE product_id = %s, substitute_id = %s, date_heure = %s, pseudo = %s"""
     mycursor.execute(sql_insert_query, (saved_list[0], saved_list[1], now, name_user, saved_list[0], saved_list[1], now, name_user))
     print('Votre recherche est bien enregistrée')
     mydb.commit()
@@ -121,7 +133,8 @@ def save_product(saved_list, name_user):
 def display_saved_product(name_user):
     """Display a saved research """
 
-    mycursor.execute(""" SELECT product_id, substitute_id FROM Favorite WHERE pseudo = %s""", (name_user,))
+    mycursor.execute(""" SELECT product_id, substitute_id FROM Favorite\
+                         WHERE pseudo = %s""", (name_user,))
     result = mycursor.fetchall()
     for x in result:
         good_product = []
@@ -130,9 +143,11 @@ def display_saved_product(name_user):
         z = x[1]
         good_product.append(y)
         bad_product.append(z)
-        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (good_product[0],))
+        mycursor.execute(""" SELECT product_name_fr FROM Product \
+                             WHERE code = %s """, (good_product[0],))
         result = mycursor.fetchall()
-        mycursor.execute(""" SELECT product_name_fr FROM Product WHERE code = %s """, (bad_product[0],))
+        mycursor.execute(""" SELECT product_name_fr FROM Product \
+                             WHERE code = %s """, (bad_product[0],))
         result2 = mycursor.fetchall()
         print('Le produit : ', result[0][0], 'a été remplacé par le produit : ', result2[0][0])
 

@@ -1,4 +1,6 @@
-from functions_db import no_duplicates_good_format, insert_category, insert_store, insert_product, insert_category_and_store_product, mydb
+from functions_db import no_duplicates_good_format, insert_category,\
+                         insert_store, insert_product,\
+                         insert_category_and_store_product, mydb
 from service import final_format
 
 # Create an empty list that will contain the categories in the desired format

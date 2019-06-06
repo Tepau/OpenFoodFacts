@@ -23,7 +23,7 @@ for category in CATEGORIES:
         all_products.extend(results['products'])
 
 selected_products = []
-keys = ('code', 'product_name',
+keys = ('code', 'product_name_fr',
         'categories', 'url', 'nutrition_grade_fr',
         'stores', 'generic_name_fr')
 for product in all_products:
@@ -31,7 +31,7 @@ for product in all_products:
         categorie = product['categories']
         stores = product['stores']
         barcode = product['code']
-        nom = product['product_name']
+        nom = product['product_name_fr']
         url = product['url']
         nutrition_grade = product['nutrition_grade_fr']
         description = product['generic_name_fr']
