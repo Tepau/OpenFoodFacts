@@ -1,3 +1,4 @@
+#! C:\Users\Malaury\Code\openfoodfacts\env\Scripts\python.exe
 from functions_db import display_substitut, display_saved_product, save_product
 from functions import manage_typing_error
 from constants import MAIN_QUESTION, QUESTION_CATEGORY,\
